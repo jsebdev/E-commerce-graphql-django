@@ -2,3 +2,5 @@ env
 db.sqlite3
 mediaRoot
 requirements_0.txt
+database/*
+**/__pycache__/

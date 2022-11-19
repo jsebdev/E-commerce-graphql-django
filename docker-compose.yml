@@ -1,0 +1,17 @@
+version: "3.9"
+services:
+  e-commerce-backend:
+    build: .
+    image: backend:v0
+    # container_name: backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./database:/home/app/database:rw
+      - ./mediaRoot:/home/app/mediaRoot:rw
+    environment:
+      EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD}
+
+volumes:
+  dabase: {}
+  mediaRoot: {}
