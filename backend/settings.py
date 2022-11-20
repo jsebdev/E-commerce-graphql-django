@@ -28,12 +28,9 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 SECRET_KEY = env('SECRET_KEY')
 
 DEBUG = False if env('PRODUCTION') == 'True' else True
-# DEBUG = False
 
 
-# ALLOWED_HOSTS = ["e-commerce-backend.fly.dev", "localhost", "127.0.0.1"]
 ALLOWED_HOSTS = env('ALLOWED_HOSTS').split(',')
-
 
 # Application definition
 
@@ -44,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "rest_framework",
     'shop',
     'corsheaders',
     'graphene_django',
@@ -137,9 +135,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # todo activate cors
 # CORS_ORIGIN_ALLOW_ALL = True
-CORS_ORIGIN_WHITELIST = ('http://localhost:8080', 'http://localhost:3000',
-                         'https://637947aa1b78220008870634--jade-sorbet-e68b87.netlify.app',
-                         'https://main--jade-sorbet-e68b87.netlify.app')
+CORS_ORIGIN_WHITELIST = tuple(env('CORS_ORIGIN_WHITELIST').split(','))
 
 AUTH_USER_MODEL = "shop.Profile"
 
@@ -207,8 +203,9 @@ MEDIA_URL = 'media/'
 # When serving static files in deployment use the STATIC_ROOT and STATIC_URL variables
 
 # Production Settings
+# SECURE_SSL_REDIRECT = True if env('PRODUCTION') == 'True' else False
+SECURE_SSL_REDIRECT = False
 CSRF_COOKIE_SECURE = True if env('PRODUCTION') == 'True' else False
-SECURE_SSL_REDIRECT = True if env('PRODUCTION') == 'True' else False
 SESSION_COOKIE_SECURE = True if env('PRODUCTION') == 'True' else False
 SECURE_HSTS_SECONDS = 60 if env('PRODUCTION') == 'True' else 0
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True if env('PRODUCTION') == 'True' else False
