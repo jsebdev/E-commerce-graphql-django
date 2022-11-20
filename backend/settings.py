@@ -10,24 +10,29 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
+import environ
 from pathlib import Path
-
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Initialise environment variables
+env = environ.Env()
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-5sotqg@lsft$@*mn3pgoygol6imt_d-cnx+deivg@gub55g*gb'
+SECRET_KEY = env('SECRET_KEY')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False if env('PRODUCTION') == 'True' else True
+# DEBUG = False
 
-ALLOWED_HOSTS = []
+
+# ALLOWED_HOSTS = ["e-commerce-backend.fly.dev", "localhost", "127.0.0.1"]
+ALLOWED_HOSTS = env('ALLOWED_HOSTS').split(',')
 
 
 # Application definition
@@ -132,7 +137,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # todo activate cors
 # CORS_ORIGIN_ALLOW_ALL = True
-CORS_ORIGIN_WHITELIST = ('http://localhost:8080', 'http://localhost:3000')
+CORS_ORIGIN_WHITELIST = ('http://localhost:8080', 'http://localhost:3000',
+                         'https://637947aa1b78220008870634--jade-sorbet-e68b87.netlify.app',
+                         'https://main--jade-sorbet-e68b87.netlify.app')
 
 AUTH_USER_MODEL = "shop.Profile"
 
@@ -164,10 +171,19 @@ GRAPHQL_JWT = {
     "JWT_LONG_RUNNING_REFRESH_TOKEN": True,
 }
 
+
+GRAPHQL_AUTH = {
+    "ALLOW_LOGIN_NOT_VERIFIED": False,
+    "EMAIL_TEMPLATE_VARIABLES": {
+        "front_domain": env('FRONT_DOMAIN'),
+    }
+}
+
+DEFAULT_FROM_EMAIL = 'jsebdev@gmail.com'
 # EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_HOST_USER = 'jsebdev@gmail.com'
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 # Options for using tls
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
@@ -189,3 +205,14 @@ MEDIA_URL = 'media/'
 
 # TODO
 # When serving static files in deployment use the STATIC_ROOT and STATIC_URL variables
+
+# Production Settings
+CSRF_COOKIE_SECURE = True if env('PRODUCTION') == 'True' else False
+SECURE_SSL_REDIRECT = True if env('PRODUCTION') == 'True' else False
+SESSION_COOKIE_SECURE = True if env('PRODUCTION') == 'True' else False
+SECURE_HSTS_SECONDS = 60 if env('PRODUCTION') == 'True' else 0
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True if env('PRODUCTION') == 'True' else False
+SECURE_HSTS_PRELOAD = True if env('PRODUCTION') == 'True' else False
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_URL = 'static/'
