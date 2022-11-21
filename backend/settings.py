@@ -204,12 +204,12 @@ MEDIA_URL = 'media/'
 
 # Production Settings
 # SECURE_SSL_REDIRECT = True if env('PRODUCTION') == 'True' else False
-SECURE_SSL_REDIRECT = False
-CSRF_COOKIE_SECURE = True if env('PRODUCTION') == 'True' else False
-SESSION_COOKIE_SECURE = True if env('PRODUCTION') == 'True' else False
-SECURE_HSTS_SECONDS = 60 if env('PRODUCTION') == 'True' else 0
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True if env('PRODUCTION') == 'True' else False
-SECURE_HSTS_PRELOAD = True if env('PRODUCTION') == 'True' else False
+# SECURE_SSL_REDIRECT = False
+# CSRF_COOKIE_SECURE = True if env('PRODUCTION') == 'True' else False
+# SESSION_COOKIE_SECURE = True if env('PRODUCTION') == 'True' else False
+# SECURE_HSTS_SECONDS = 60 if env('PRODUCTION') == 'True' else 0
+# SECURE_HSTS_INCLUDE_SUBDOMAINS = True if env('PRODUCTION') == 'True' else False
+# SECURE_HSTS_PRELOAD = True if env('PRODUCTION') == 'True' else False
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = 'static/'
