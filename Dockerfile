@@ -1,26 +1,31 @@
 # base image  
 FROM python:3.8-bullseye
-# setup environment variable  
-ENV DockerHOME=/home/app  
 
-# set work directory  
-RUN mkdir -p $DockerHOME  
-
-# where your code lives  
-WORKDIR $DockerHOME  
-
+# set work directory
+WORKDIR /usr/src/app
 # set environment variables  
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1  
+ENV HomeDir=/home/app  
 
+# set work directory  
+RUN mkdir -p $HomeDir  
+WORKDIR $HomeDir  
+
+# install dependencies
+COPY requirements.txt /tmp/requirements.txt
+RUN set -ex && \
+    pip install --upgrade pip && \
+    pip install -r /tmp/requirements.txt && \
+    rm -rf /root/.cache/
 # install dependencies  
 RUN pip install --upgrade pip  
 
 # copy whole project to your docker home directory. 
-COPY . $DockerHOME  
-# run this command to install all dependencies  
-RUN pip install -r requirements.txt  
+COPY . $HomeDir  
+
 # port where the Django app runs  
 EXPOSE 8000
+
 # start server  
-CMD ["python3", "manage.py", "runserver", "0:8000"]  
+CMD ["gunicorn", "--bind", ":8000", "--workers", "2", "backend.wsgi:application"]

@@ -1,9 +1,12 @@
-# fly.toml file generated for e-commerce-backend on 2022-11-19T18:05:29+01:00
+# fly.toml file generated for port-ecommerce on 2022-11-21T19:15:05+01:00
 
-app = "e-commerce-backend"
+app = "port-ecommerce"
 kill_signal = "SIGINT"
 kill_timeout = 5
 processes = []
+
+[deploy]
+  release_command = "python manage.py migrate"
 
 [env]
   PORT = "8000"
@@ -41,3 +44,7 @@ processes = []
 [[statics]]
   guest_path = "/app/public"
   url_prefix = "/static/"
+
+[mounts]
+  source="appDataVolume"
+  destination="/home/app/myAppData"

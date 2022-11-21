@@ -9,15 +9,16 @@ from backend.settings import env
 class EnvView(APIView):
     def post(self, request, format=None):
         password = request.data.get('password')
-        print('15: password >>>', password)
         if password == env('CUSTOM_PASSWORD'):
             return JsonResponse({
                 'EMAIL_HOST_PASSWORD': env('EMAIL_HOST_PASSWORD'),
                 'SECRET_KEY': env('SECRET_KEY'),
                 'PRODUCTION': env('PRODUCTION'),
+                'DEBUG': env('DEBUG'),
                 'FRONT_DOMAIN': env('FRONT_DOMAIN'),
                 'ALLOWED_HOSTS': env('ALLOWED_HOSTS'),
                 'CORS_ORIGIN_WHITELIST': env('CORS_ORIGIN_WHITELIST'),
+                'PASSWORD': env('PASSWORD'),
             })
         return JsonResponse({
             'error': 'password is not correct'

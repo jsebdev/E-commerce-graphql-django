@@ -13,9 +13,12 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 import environ
 from pathlib import Path
 import os
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+DATA_DIR = 'myAppData'
 
 # Initialise environment variables
 env = environ.Env()
@@ -27,7 +30,7 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 SECRET_KEY = env('SECRET_KEY')
 
-DEBUG = False if env('PRODUCTION') == 'True' else True
+DEBUG = True if env('DEBUG') == 'True' else False
 
 
 ALLOWED_HOSTS = env('ALLOWED_HOSTS').split(',')
@@ -86,9 +89,11 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
+    'default': dj_database_url.parse(os.environ.get('DATABASE_URL'), conn_max_age=600),
+} if env('PRODUCTION') == 'True' else {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'database' / 'db.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
@@ -194,10 +199,10 @@ EMAIL_PORT = 587
 APPEND_SLASH = False
 
 # MEDIA_ROOT is where the uploaded files are stored
-MEDIA_ROOT = os.path.join(BASE_DIR, 'mediaRoot')
+MEDIA_ROOT = os.path.join(BASE_DIR, DATA_DIR, 'mediaRoot')
 # MEDIA_URL is the URL that the browser uses to access the files in MEDIA_ROOT
 # This is done only in development
-MEDIA_URL = 'media/'
+MEDIA_URL = '/media/'
 
 # TODO
 # When serving static files in deployment use the STATIC_ROOT and STATIC_URL variables
@@ -211,5 +216,5 @@ MEDIA_URL = 'media/'
 # SECURE_HSTS_INCLUDE_SUBDOMAINS = True if env('PRODUCTION') == 'True' else False
 # SECURE_HSTS_PRELOAD = True if env('PRODUCTION') == 'True' else False
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, DATA_DIR, 'static')
+STATIC_URL = '/static/'
