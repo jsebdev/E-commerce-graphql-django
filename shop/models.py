@@ -11,7 +11,6 @@ class Profile(AbstractUser):
         max_length=255, unique=True, blank=False, verbose_name='email')
     USERNAME_FIELD: str = 'username'
     EMAIL_FIELD: str = 'email'
-    bio = models.CharField(blank=True, max_length=500)
 
 
 class Tag(models.Model):

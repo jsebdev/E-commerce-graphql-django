@@ -13,7 +13,7 @@ from pathlib import Path
 from shop.schema_responses import MutateItemFailed, MutateItemResponse, MutateItemSuccess, DeleteItemSuccess
 from . import models
 from .constants import IMAGES_PATH
-from .helpers import get_image_format, fix_spaces, replace_format
+from .helpers import get_image_format, fix_spaces, replace_format, minimize_image
 
 
 class AuthMutation(graphene.ObjectType):
@@ -24,6 +24,7 @@ class AuthMutation(graphene.ObjectType):
     resend_activation_email = mutations.ResendActivationEmail.Field()
     send_password_reset_email = mutations.SendPasswordResetEmail.Field()
     password_reset = mutations.PasswordReset.Field()
+    password_change = mutations.PasswordChange.Field()
 
 
 class ItemCreation(graphene.Mutation):
@@ -64,6 +65,8 @@ class ItemCreation(graphene.Mutation):
             item = seller.item_set.create(**kwargs)
             if tagsIds:
                 item.tags.set(tags)
+            if image:
+                minimize_image(item.image.path)
         except Exception as e:
             return MutateItemFailed(error_message=str(e))
 
@@ -150,14 +153,7 @@ class ItemModification(graphene.Mutation):
         if (image):
             file = File(image)
             if item.image:
-                # print('therre is an image already')
-                # print(item.image.path)
-                # print(image)
-                # print(type(image))
-                # print('157: file.name >>>', file.name)
                 format = get_image_format(file.name)
-                # print('163: format >>>', format)
-                # print(type(file))
                 try:
                     os.remove(item.image.path)
                 except Exception as e:
@@ -172,7 +168,8 @@ class ItemModification(graphene.Mutation):
                 new_path = f'{settings.MEDIA_ROOT}/{new_name}'
                 path = default_storage.save(new_path, file)
                 item.image.name = new_name
-            print('new image saved in ', path)
+            print('new image saved in ', item.image.path)
+            minimize_image(item.image.path)
         else:
             print('no image was sent')
 

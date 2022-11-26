@@ -158,26 +158,27 @@ AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
 ]
 
-GRAPHQL_JWT = {
-    "JWT_ALLOW_ANY_CLASSES": [
-        "graphql_auth.mutations.Register",
-        "graphql_auth.mutations.VerifyAccount",
-        "graphql_auth.mutations.ObtainJSONWebToken",
-        "graphql_auth.mutations.UpdateAccount",
-        "graphql_auth.mutations.ResendActivationEmail",
-        "graphql_auth.mutations.SendPasswordResetEmail",
-        "graphql_auth.mutations.PasswordReset",
-    ],
-    "JWT_VERIFY_EXPIRATION": True,
-    "JWT_LONG_RUNNING_REFRESH_TOKEN": True,
-}
+# GRAPHQL_JWT = {
+#     "JWT_ALLOW_ANY_CLASSES": [
+#         "graphql_auth.mutations.Register",
+#         "graphql_auth.mutations.VerifyAccount",
+#         "graphql_auth.mutations.ObtainJSONWebToken",
+#         "graphql_auth.mutations.UpdateAccount",
+#         "graphql_auth.mutations.ResendActivationEmail",
+#         "graphql_auth.mutations.SendPasswordResetEmail",
+#         "graphql_auth.mutations.PasswordReset",
+#     ],
+#     "JWT_VERIFY_EXPIRATION": True,
+#     "JWT_LONG_RUNNING_REFRESH_TOKEN": True,
+# }
 
 
 GRAPHQL_AUTH = {
     "ALLOW_LOGIN_NOT_VERIFIED": False,
     "EMAIL_TEMPLATE_VARIABLES": {
         "front_domain": env('FRONT_DOMAIN'),
-    }
+    },
+    "UPDATE_MUTATION_FIELDS": ["email", "username"]
 }
 
 DEFAULT_FROM_EMAIL = 'jsebdev@gmail.com'

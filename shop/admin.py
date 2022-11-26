@@ -7,7 +7,7 @@ from .models import Item, Profile, Tag
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
     model = Profile
-    list_display = ('id', 'username', 'bio')
+    list_display = ('id', 'username')
 
 
 @admin.register(Tag)
