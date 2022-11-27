@@ -1,6 +1,6 @@
 # E-commerce-graphql-django
 
-This is the back-end side of a e-commerce website.
+This is the back-end side of an e-commerce website. I did this project with the sole purpose of improving my skills as a fullstack developer
 
 [Here](https://github.com/jsebdev/E-commerce-graphql-nextjs) is the front-end side and it's [deployment](http://port-ecommerce.shop/)
 
@@ -17,6 +17,7 @@ Table of Contents
 - 3 models: User, Item, tag
 - User authentication using graphql
 - Storage and optimization of images
+- Search items by tags and text
 
 ## Environment variables
 The following environment variables are necessary for the correct functioning. Add them to an .env file
