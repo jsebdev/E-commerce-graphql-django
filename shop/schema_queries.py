@@ -33,7 +33,6 @@ class Query(UserQuery, MeQuery, graphene.ObjectType):
         return items.all()
 
     def resolve_items_by_seller(root, info, username):
-        print('resolving items for ', username)
         return models.Item.objects.prefetch_related('tags').select_related('seller').filter(seller__username=username)
 
     def resolve_items_by_tags(root, info, tagsIds, filter=True, published=True):

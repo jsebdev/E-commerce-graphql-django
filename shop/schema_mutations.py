@@ -1,4 +1,5 @@
 import os
+import shutil
 
 from django.conf import settings
 from django.core.files import File
@@ -13,7 +14,7 @@ from pathlib import Path
 from shop.schema_responses import MutateItemFailed, MutateItemResponse, MutateItemSuccess, DeleteItemSuccess
 from . import models
 from .constants import IMAGES_PATH
-from .helpers import get_image_format, fix_spaces, replace_format, minimize_image
+from .helpers import get_image_format, fix_spaces, replace_format, edit_image
 
 
 class AuthMutation(graphene.ObjectType):
@@ -66,7 +67,8 @@ class ItemCreation(graphene.Mutation):
             if tagsIds:
                 item.tags.set(tags)
             if image:
-                minimize_image(item.image.path)
+                # minimize_image(item.image.path)
+                edit_image(item.image.path)
         except Exception as e:
             return MutateItemFailed(error_message=str(e))
 
@@ -125,7 +127,8 @@ class ItemModification(graphene.Mutation):
                 old_directory = Path(initial_path).parent
                 os.mkdir(new_directory)
                 os.replace(initial_path, new_path)
-                os.rmdir(old_directory)
+                # os.rmdir(old_directory)
+                shutil.rmtree(old_directory)
                 item.image.name = new_name
 
         item.subtitle = kwargs.pop('subtitle', item.subtitle)
@@ -168,8 +171,9 @@ class ItemModification(graphene.Mutation):
                 new_path = f'{settings.MEDIA_ROOT}/{new_name}'
                 path = default_storage.save(new_path, file)
                 item.image.name = new_name
-            print('new image saved in ', item.image.path)
-            minimize_image(item.image.path)
+            # print('new image saved in ', item.image.path)
+            # minimize_image(item.image.path)
+            edit_image(item.image.path)
         else:
             print('no image was sent')
 
@@ -194,7 +198,8 @@ class ItemDeletion(graphene.Mutation):
         if item.image:
             try:
                 os.remove(item.image.path)
-                os.rmdir(Path(item.image.path).parent)
+                # os.rmdir(Path(item.image.path).parent)
+                shutil.rmtree(Path(item.image.path).parent)
             except Exception as e:
                 print(e)
         item.delete()
