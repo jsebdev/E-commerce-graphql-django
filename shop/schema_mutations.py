@@ -171,11 +171,7 @@ class ItemModification(graphene.Mutation):
                 new_path = f'{settings.MEDIA_ROOT}/{new_name}'
                 path = default_storage.save(new_path, file)
                 item.image.name = new_name
-            # print('new image saved in ', item.image.path)
-            # minimize_image(item.image.path)
             edit_image(item.image.path)
-        else:
-            print('no image was sent')
 
         item.save()
 

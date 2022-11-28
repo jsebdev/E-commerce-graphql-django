@@ -46,12 +46,11 @@ def minimize_image(path):
     with Image.open(path) as image:
         file_format = image.format
         width, height = image.size
-        if not (width <= base and height <= base):
-            # print('64: path >>>', path)
+        if width >= base and height >= base:
+            print('minimizing image: ', path)
+            print('width: ', width, ' height: ', height)
             file_format = image.format
-            # print('62: file_format >>>', file_format)
             exif = image._getexif()
-            # print('63: exif: ', exif)
             if width > height:
                 new_height = base
                 new_width = int(width * new_height / height)
@@ -61,8 +60,10 @@ def minimize_image(path):
 
             image = image.resize(
                 (new_width, new_height), PIL.Image.Resampling.HAMMING)
-            new_name = f'{get_file_dir(path)}/{get_file_name(path)}.{get_file_extension(path)}'
-            image.save(new_name, file_format)
+            # new_name = f'{get_file_dir(path)}/{get_file_name(path)}.{get_file_extension(path)}'
+            print('new sizes:')
+            print('width: ', image.size[0], ' height: ', image.size[1])
+            image.save(path, file_format)
 
             orientation_key = 274  # cf ExifTags
             if exif and orientation_key in exif:
@@ -78,7 +79,7 @@ def minimize_image(path):
                 if orientation in rotate_values:
                     image = image.transpose(rotate_values[orientation])
 
-                image.save(new_name, file_format)
+                image.save(path, file_format)
 
     return path
 
