@@ -57,11 +57,11 @@ source env/bin/activate
 Install all dependencies
 
 ```
-pip3 install -r requirements.txt
+pip install -r requirements.txt
 ```
 
 Run django server
 
 ```
-python3 manage.py runserver
+python manage.py runserver
 ```
