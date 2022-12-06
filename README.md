@@ -33,10 +33,12 @@ The following environment variables are necessary for the correct functioning. A
 
 ## How to run
 
+The following instructions are for linux machines
+
 Clone the repo
 
 ```
-https://github.com/jsebdev/E-commerce-graphql-django.git
+git clone https://github.com/jsebdev/E-commerce-graphql-django.git
 cd E-commerce-graphql-django
 ```
 
@@ -48,7 +50,7 @@ pip install virtualenv
 Create and run the virtual environment
 
 ```
-virtualenv env
+python -m venv env
 source env/bin/activate
 ```
 
